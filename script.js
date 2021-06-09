@@ -11,7 +11,6 @@ const symbols = {
     Clear: "C",
     Erase: "E"
 }
-// const symbols = [".","+","-","*","/","=","C","E"]
 let upperDisplayNumber = "";
 let lowerDisplayNumber ="";
 let operatorSelected = "";
@@ -38,10 +37,10 @@ for (const nameSymbol in symbols) {
             symbolButton.classList.add("Equal");
             symbolButton.addEventListener("click", equalClicled);
             break;
-        case "C":
+        case "Clear":
             symbolButton.addEventListener("click", clearClicked);
             break;
-        case "E":
+        case "Erase":
             symbolButton.addEventListener("click", eraseClicked);
             break;
         default:
@@ -63,8 +62,9 @@ function dotClicked(e){
 
 function equalClicled(e){
     if(e.target.classList.contains("Equal")){
-        lowerDisplay.innerText  = lowerDisplayNumber = operate(operatorSelected, upperDisplayNumber, lowerDisplayNumber);        
-        upperDisplay.innerText = upperDisplayNumber =  "";
+        upperDisplay.innerText = upperDisplayNumber = operate(operatorSelected, upperDisplayNumber, lowerDisplayNumber).toString();        
+        lowerDisplay.innerText = lowerDisplayNumber =  "";
+        dotPlaced = false;       
         removeOperatorSelected();
     }
 }
@@ -79,16 +79,32 @@ function removeOperatorSelected(){
 
 function operatorClicked(e){
     if(e.target.classList.contains("Operator")){
-        upperDisplay.innerText = upperDisplayNumber = lowerDisplayNumber;
+        // si no hay nada en el display de arriba, no se debe operar todavia
+        if (upperDisplayNumber != ""){
+            //si hay numeros en el display de abajo, hace la operacion y utiliza el numero operando para la nueva operacion                     
+            if (lowerDisplayNumber != ""){
+                upperDisplay.innerText = upperDisplayNumber = operate(operatorSelected, upperDisplayNumber, lowerDisplayNumber).toString(); 
+                lowerDisplayNumber = lowerDisplay.innerText = "";
+
+                dotPlaced = false;       
+            }                         
+            // si en el display de abajo no hay numeros, o una vez hecho la operacion, cambia el operando
+            removeOperatorSelected()
+        } else {   
+            // se pone los numeros del display de abajo en el display de arriba
+            upperDisplay.innerText = upperDisplayNumber = lowerDisplayNumber;
+            lowerDisplay.innerText = lowerDisplayNumber = "";
+        }
         operatorSelected = e.target.innerText;
-        lowerDisplayNumber = lowerDisplay.innerText = "";
-        e.target.classList.add("operatorSelected");
-        dotPlaced = false;
+        e.target.classList.add("operatorSelected"); 
     }
 }
 
 function numberClicked(e){
     if (e.target.className === "Number") {
+        if(operatorSelected == ""){
+           upperDisplay.innerText = upperDisplayNumber = ""; 
+        }
         if(lowerDisplayNumber.length < 25){
             lowerDisplayNumber += e.target.innerText;
             lowerDisplay.innerText = lowerDisplayNumber;
@@ -100,7 +116,9 @@ function clearClicked(e){
     upperDisplay.innerText = "";
     lowerDisplay.innerText = "";
     lowerDisplayNumber = "";
+    upperDisplayNumber = "";
     dotPlaced = false;
+    removeOperatorSelected()
 }
 
 function eraseClicked(e){
@@ -133,5 +151,7 @@ function operate(operator, a, b){
             return multiply(a,b);
         case "/":
             return divide(a,b);
+        default:
+            return "";
     }
 }
