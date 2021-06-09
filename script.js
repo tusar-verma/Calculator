@@ -1,49 +1,115 @@
 const calculator = document.querySelector("#Calculator");
-const symbols = [".","=","+","-","*","/","C","E"]
+const upperDisplay = document.querySelector("#upperDisplay");
+const lowerDisplay = document.querySelector("#lowerDisplay");
+const symbols = {
+    Dot: ".",
+    Add: "+",
+    Substract: "-",
+    Multiply: "*",
+    Divide: "/",
+    Equal: "=",
+    Clear: "C",
+    Erase: "E"
+}
+// const symbols = [".","+","-","*","/","=","C","E"]
+let upperDisplayNumber = "";
+let lowerDisplayNumber ="";
+let operatorSelected = "";
+let dotPlaced = false;
 
 for (let index = 0; index < 10; index++) {
     const numberButton = document.createElement("button");
     numberButton.innerText = index;
+    numberButton.classList.add("Number");
     numberButton.style.gridArea = `Number${index}`;
+    numberButton.addEventListener("click", numberClicked)
     calculator.appendChild(numberButton);
 }
 
-symbols.forEach(symbol => {
+for (const nameSymbol in symbols) {   
     const symbolButton = document.createElement("button");
-    symbolButton.innerText = symbol;
-    switch (symbol) {
-        case ".":
-            symbolButton.style.gridArea = "Dot";
+    symbolButton.innerText = symbols[nameSymbol];
+    switch (nameSymbol) {
+        case "Dot":
+            symbolButton.classList.add("Dot");
+            symbolButton.addEventListener("click", dotClicked);            
             break;
-        case "=":
-            symbolButton.style.gridArea = "Equal";
-            break;
-        case "+":
-            symbolButton.style.gridArea = "Add";
-            break;
-        case "-":
-            symbolButton.style.gridArea = "Substract";
-            break;
-        case "*":
-            symbolButton.style.gridArea = "Multiply";
-            break;
-        case "/":
-            symbolButton.style.gridArea = "Divide";
+        case "Equal":            
+            symbolButton.classList.add("Equal");
+            symbolButton.addEventListener("click", equalClicled);
             break;
         case "C":
-            symbolButton.style.gridArea = "CLEAR";
+            symbolButton.addEventListener("click", clearClicked);
             break;
         case "E":
-            symbolButton.style.gridArea = "ERASE";
+            symbolButton.addEventListener("click", eraseClicked);
             break;
-    }
+        default:
+            symbolButton.classList.add("Operator");
+            symbolButton.addEventListener("click", operatorClicked);
+            break;
+    }    
+    symbolButton.style.gridArea = nameSymbol;    
     calculator.appendChild(symbolButton);
-});
+}
 
-const calculatorDisplay = document.createElement("div");
-calculatorDisplay.id = "display";
-calculator.appendChild(calculatorDisplay);
+function dotClicked(e){
+    if(e.target.classList.contains("Dot") && !dotPlaced){
+        lowerDisplayNumber += ".";
+        lowerDisplay.innerText = lowerDisplayNumber;
+        dotPlaced = true;
+    }
+}
 
+function equalClicled(e){
+    if(e.target.classList.contains("Equal")){
+        lowerDisplay.innerText  = lowerDisplayNumber = operate(operatorSelected, upperDisplayNumber, lowerDisplayNumber);        
+        upperDisplay.innerText = upperDisplayNumber =  "";
+        removeOperatorSelected();
+    }
+}
+
+function removeOperatorSelected(){
+    operatorSelected = "";
+    const operatorElemSelected = Array.from(document.querySelectorAll(".operatorSelected"));
+    operatorElemSelected.forEach(elem => {
+        elem.classList.remove("operatorSelected")
+    });
+}
+
+function operatorClicked(e){
+    if(e.target.classList.contains("Operator")){
+        upperDisplay.innerText = upperDisplayNumber = lowerDisplayNumber;
+        operatorSelected = e.target.innerText;
+        lowerDisplayNumber = lowerDisplay.innerText = "";
+        e.target.classList.add("operatorSelected");
+        dotPlaced = false;
+    }
+}
+
+function numberClicked(e){
+    if (e.target.className === "Number") {
+        if(lowerDisplayNumber.length < 25){
+            lowerDisplayNumber += e.target.innerText;
+            lowerDisplay.innerText = lowerDisplayNumber;
+        }
+    }
+}
+
+function clearClicked(e){
+    upperDisplay.innerText = "";
+    lowerDisplay.innerText = "";
+    lowerDisplayNumber = "";
+    dotPlaced = false;
+}
+
+function eraseClicked(e){
+    if (lowerDisplayNumber.slice(-1) === "."){
+        dotPlaced = false;
+    }
+    lowerDisplayNumber = lowerDisplayNumber.slice(0,-1);
+    lowerDisplay.innerText = lowerDisplayNumber;
+}
 
 function add(a, b){
     return Number(a) + Number(b);

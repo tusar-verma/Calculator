@@ -4,6 +4,7 @@ html, body{
 
 button {
     font-size: larger;
+    margin: 5px;
 }
 
 #Content {
@@ -22,7 +23,7 @@ button {
     grid-template-rows: repeat(7,50px);
     grid-template-areas: "display display display display"
                          "display display display display"
-                         "CLEAR CLEAR ERASE ERASE"
+                         "Clear Clear Erase Erase"
                          "Number7 Number8 Number9 Divide"
                          "Number4 Number5 Number6 Multiply"
                          "Number1 Number2 Number3 Substract"
@@ -31,7 +32,22 @@ button {
 }
 
 #display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
     grid-area: display;
     border: 2px solid red;
     margin-bottom: 20px;
+}
+
+#upperDisplay, #lowerDisplay {
+    font-size: larger;
+    margin: 0;
+    flex-grow: 1;
+    padding: 10px;
+}
+
+.operatorSelected {
+    background-color: darkorange;
 }
