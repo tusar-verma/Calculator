@@ -1,10 +1,26 @@
 html, body{
+    margin: 0;
     height: 100%;
+    font-family: "Source Code Pro";
+    background-color: black;
 }
 
 button {
     font-size: larger;
     margin: 5px;
+    background-color: rgb(187, 187, 187);
+    font-family: "Source Code Pro";
+    font-size: x-large;
+    font-weight: 600;
+    box-shadow: 3px 3px rgb(71, 71, 71);
+}
+
+button:hover {
+    background-color: rgb(133, 133, 133);;
+}
+button:active {
+    
+    background-color: rgb(104, 104, 104);
 }
 
 #Content {
@@ -17,10 +33,9 @@ button {
 #Calculator {
     display: grid;
     margin: auto;
-    border: 4px solid black;
-    padding: 15px;
-    grid-template-columns: repeat(4,75px);
-    grid-template-rows: repeat(7,50px);
+    padding: 40px;
+    grid-template-columns: repeat(4,100px);
+    grid-template-rows: repeat(7,75px);
     grid-template-areas: "display display display display"
                          "display display display display"
                          "Clear Clear Erase Erase"
@@ -28,7 +43,8 @@ button {
                          "Number4 Number5 Number6 Multiply"
                          "Number1 Number2 Number3 Substract"
                          "Number0 Dot Equal Add";
-    
+    background-color: rgb(126, 126, 206);  
+    border-radius: 10px;
 }
 
 #display {
@@ -37,15 +53,23 @@ button {
     justify-content: center;
     align-items: flex-end;
     grid-area: display;
-    border: 2px solid red;
+    border: 5px solid rgb(0, 0, 0);
     margin-bottom: 20px;
+    background-color: rgb(233, 233, 233);
+    font-size: x-large;
+    border-radius: 10px;
 }
 
 #upperDisplay, #lowerDisplay {
     font-size: larger;
     margin: 0;
     flex-grow: 1;
-    padding: 10px;
+    padding-right: 20px;
+    font-weight: 600;
+}
+
+#upperDisplay {
+    padding-top: 20px;
 }
 
 .operatorSelected {
