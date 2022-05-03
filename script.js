@@ -79,6 +79,8 @@ function removeOperatorSelected(){
 
 function operatorClicked(e){
     if(e.target.classList.contains("Operator")){
+        // si clickeo en un operador, entonces el siguiente numero puede poner una coma
+        dotPlaced = false;
         // si no hay nada en el display de arriba, no se debe operar todavia
         if (upperDisplayNumber != ""){
             //si hay numeros en el display de abajo, hace la operacion y utiliza el numero operando para la nueva operacion                     
